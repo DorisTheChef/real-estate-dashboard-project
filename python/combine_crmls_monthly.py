@@ -3,15 +3,20 @@ from pathlib import Path
 import pandas as pd
 
 
+# Project folders. Raw MLS exports stay ignored by Git under data/raw, while
+# analysis-ready combined files are written to data/processed.
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 RAW_DIR = PROJECT_ROOT / "data" / "raw"
 PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 
+# Week 1 scope: combine all available monthly files from Jan 2024 through
+# Apr 2026. Change END_MONTH when a newer completed month is available.
 START_MONTH = "202401"
 END_MONTH = "202604"
 
 
 def month_range(start_month, end_month):
+    """Yield YYYYMM strings from start_month through end_month, inclusive."""
     start_year = int(start_month[:4])
     start_month_num = int(start_month[4:])
     end_year = int(end_month[:4])
@@ -29,6 +34,7 @@ def month_range(start_month, end_month):
 
 
 def select_monthly_file(prefix, month):
+    """Choose the best source file for a month, preferring _filled files."""
     filled_file = RAW_DIR / f"{prefix}{month}_filled.csv"
     regular_file = RAW_DIR / f"{prefix}{month}.csv"
 
@@ -42,6 +48,9 @@ def select_monthly_file(prefix, month):
 def read_monthly_file(file_path):
     df = pd.read_csv(file_path, low_memory=False)
 
+    # Boss note: *_filled.csv files include two extra columns at the end.
+    # Drop those columns before concatenation so schemas line up with regular
+    # monthly files.
     if file_path.stem.endswith("_filled"):
         dropped_columns = list(df.columns[-2:])
         df = df.iloc[:, :-2]
@@ -54,6 +63,7 @@ def read_monthly_file(file_path):
 
 
 def combine_dataset(prefix, dataset_label, months):
+    """Load, concatenate, and Residential-filter one CRMLS dataset type."""
     dataframes = []
     missing_months = []
     expected_columns = None
@@ -75,6 +85,9 @@ def combine_dataset(prefix, dataset_label, months):
             expected_columns = list(df.columns)
             expected_column_set = set(df.columns)
         elif list(df.columns) != expected_columns:
+            # Some monthly exports contain slightly different API fields.
+            # pandas.concat keeps the union of all columns and fills blanks
+            # where a month does not contain a field.
             missing_columns = sorted(expected_column_set - set(df.columns))
             added_columns = sorted(set(df.columns) - expected_column_set)
             print(f"  Column note: layout differs in {file_path.name}")
@@ -95,6 +108,7 @@ def combine_dataset(prefix, dataset_label, months):
     if "PropertyType" not in combined.columns:
         raise ValueError(f"{dataset_label} data does not contain a PropertyType column")
 
+    # Strip whitespace so values like "Residential " still pass the filter.
     residential = combined[
         combined["PropertyType"].astype(str).str.strip().eq("Residential")
     ].copy()
