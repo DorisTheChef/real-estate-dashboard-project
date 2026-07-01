@@ -10,9 +10,9 @@ RAW_DIR = PROJECT_ROOT / "data" / "raw"
 PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 
 # Week 1 scope: combine all available monthly files from Jan 2024 through
-# Apr 2026. Change END_MONTH when a newer completed month is available.
+# May 2026. Change END_MONTH when a newer completed month is available.
 START_MONTH = "202401"
-END_MONTH = "202604"
+END_MONTH = "202605"
 
 
 def month_range(start_month, end_month):

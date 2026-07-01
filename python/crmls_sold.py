@@ -46,7 +46,7 @@ if token:
     params = {
         '$select': 'BuyerAgentAOR, ListAgentAOR, Flooring,ViewYN,WaterfrontYN,BasementYN,PoolPrivateYN, OriginalListPrice, ListingKey,ListAgentEmail,CloseDate,ClosePrice,ListAgentFirstName,ListAgentLastName,Latitude,Longitude,UnparsedAddress,PropertyType,LivingArea,ListPrice,DaysOnMarket,ListOfficeName,BuyerOfficeName,CoListOfficeName,ListAgentFullName,CoListAgentFirstName,CoListAgentLastName,BuyerAgentMlsId,BuyerAgentFirstName,BuyerAgentLastName,FireplacesTotal,AssociationFeeFrequency,AboveGradeFinishedArea,ListingKeyNumeric,MLSAreaMajor,TaxAnnualAmount,CountyOrParish,MlsStatus,ElementarySchool,AttachedGarageYN,ParkingTotal,BuilderName,PropertySubType,LotSizeAcres,SubdivisionName,BuyerOfficeAOR,YearBuilt,StreetNumberNumeric,ListingId,BathroomsTotalInteger,City,TaxYear,BuildingAreaTotal,BedroomsTotal,ContractStatusChangeDate,ElementarySchoolDistrict,CoBuyerAgentFirstName,PurchaseContractDate,ListingContractDate,BelowGradeFinishedArea,BusinessType,StateOrProvince,CoveredSpaces,MiddleOrJuniorSchool,FireplaceYN,Stories,HighSchool,Levels,LotSizeDimensions,LotSizeArea,MainLevelBedrooms,NewConstructionYN,GarageSpaces,HighSchoolDistrict,PostalCode,AssociationFee,LotSizeSquareFeet,MiddleOrJuniorSchoolDistrict,OriginatingSystemName,OriginatingSystemSubName',
       
-        '$filter': f"MlsStatus eq 'Closed' and CloseDate ge {datetime(2026, 2, 1).isoformat(timespec='milliseconds')}Z and CloseDate lt {datetime(2026, 3, 1).isoformat(timespec='milliseconds')}Z",
+        '$filter': f"MlsStatus eq 'Closed' and CloseDate ge {datetime(2026, 5, 1).isoformat(timespec='milliseconds')}Z and CloseDate lt {datetime(2026, 6, 1).isoformat(timespec='milliseconds')}Z",
 
         '$top': 1000  # Extracting up to 1000 observations
     }
@@ -54,9 +54,9 @@ if token:
     # Send a GET request to the API endpoint with the token and parameters
     total_records = 0
     project_root = Path(__file__).resolve().parent.parent
-    data_dir = project_root / 'data'
+    data_dir = project_root / 'data' / 'raw'
     data_dir.mkdir(parents=True, exist_ok=True)
-    csv_file = data_dir / 'CRMLSSold202602.csv'
+    csv_file = data_dir / 'CRMLSSold202605.csv'
 
     with open(csv_file, mode='w', newline='') as file:
         writer = csv.DictWriter(file, fieldnames=['BuyerAgentAOR','ListAgentAOR','Flooring','ViewYN', 'WaterfrontYN','BasementYN','PoolPrivateYN','OriginalListPrice','ListingKey', 'CloseDate', 'ClosePrice', 'ListAgentFirstName', 'ListAgentLastName', 'Latitude', 'Longitude', 'UnparsedAddress', 'PropertyType', 'LivingArea', 'ListPrice', 'DaysOnMarket', 'ListOfficeName', 'BuyerOfficeName', 'CoListOfficeName', 'ListAgentFullName', 'CoListAgentFirstName', 'CoListAgentLastName', 'BuyerAgentMlsId', 'BuyerAgentFirstName', 'BuyerAgentLastName', 'FireplacesTotal', 'AssociationFeeFrequency', 'AboveGradeFinishedArea', 'ListingKeyNumeric', 'MLSAreaMajor', 'TaxAnnualAmount', 'CountyOrParish', 'MlsStatus', 'ElementarySchool', 'AttachedGarageYN', 'ParkingTotal', 'BuilderName', 'PropertySubType', 'LotSizeAcres', 'SubdivisionName', 'BuyerOfficeAOR', 'YearBuilt', 'StreetNumberNumeric',  'ListingId', 'BathroomsTotalInteger', 'City',  'TaxYear', 'BuildingAreaTotal', 'BedroomsTotal', 'ContractStatusChangeDate',  'ElementarySchoolDistrict', 'CoBuyerAgentFirstName', 'PurchaseContractDate', 'ListingContractDate', 'BelowGradeFinishedArea', 'BusinessType',  'StateOrProvince', 'CoveredSpaces', 'MiddleOrJuniorSchool', 'FireplaceYN', 'Stories', 'HighSchool', 'Levels', 'LotSizeDimensions', 'LotSizeArea', 'MainLevelBedrooms', 'NewConstructionYN', 'GarageSpaces', 'HighSchoolDistrict', 'PostalCode', 'AssociationFee', 'LotSizeSquareFeet', 'MiddleOrJuniorSchoolDistrict','OriginatingSystemName','OriginatingSystemSubName'])
