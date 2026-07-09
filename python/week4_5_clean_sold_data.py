@@ -17,7 +17,8 @@ INPUT_FILE = (
     / f"crmls_sold_combined_residential_with_mortgage_rates_{START_MONTH}_{END_MONTH}.csv"
 )
 OUTPUT_FILE = (
-    PROCESSED_DIR / f"crmls_sold_cleaned_analysis_ready_{START_MONTH}_{END_MONTH}.csv"
+    PROCESSED_DIR
+    / f"crmls_sold_cleaned_before_ca_filter_{START_MONTH}_{END_MONTH}.csv"
 )
 
 # Date columns must be true datetime values before timeline checks can work.
@@ -337,7 +338,12 @@ def build_dtype_confirmation(df):
     )
 
 
-def save_cleaning_summary(before_shape, after_shape, high_missing_count, metadata_count):
+def save_cleaning_summary(
+    before_shape,
+    after_shape,
+    high_missing_count,
+    metadata_count,
+):
     """Build a one-table summary of the main cleaning transformations."""
     summary_rows = [
         {
@@ -356,11 +362,11 @@ def save_cleaning_summary(before_shape, after_shape, high_missing_count, metadat
         {"metric": "unnecessary_metadata_columns_dropped", "value": metadata_count},
         {
             "metric": "rows_removed",
-            "value": 0,
+            "value": before_shape[0] - after_shape[0],
         },
         {
             "metric": "row_removal_note",
-            "value": "Invalid values were flagged, not removed, to preserve reviewable records.",
+            "value": "No rows were removed. Invalid values were flagged for investigation.",
         },
     ]
 
@@ -394,6 +400,25 @@ def main():
     add_date_consistency_flags(sold)
     add_geographic_quality_flags(sold)
     outlier_threshold_report = add_outlier_review_flags(sold)
+
+    # Remove fields that do not add useful information to the final dashboards.
+    # PropertyType is constant after the Residential filter; the location and
+    # compensation fields are redundant, overly granular, or outside the planned
+    # analysis; and ListingId is unnecessary because ListingKey identifies records.
+    final_columns_to_drop = [
+        "ListingId",
+        "PropertyType",
+        "AssociationFeeFrequency",
+        "MLSAreaMajor",
+        "SubdivisionName",
+        "BuyerAgencyCompensationType",
+        "StreetNumberNumeric",
+    ]
+    final_columns_to_drop = [
+        column for column in final_columns_to_drop if column in sold.columns
+    ]
+    sold = sold.drop(columns=final_columns_to_drop)
+    metadata_columns.extend(final_columns_to_drop)
 
     # Build reports that document the cleaned dataset and all transformations.
     after_shape = sold.shape
