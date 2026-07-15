@@ -105,6 +105,12 @@ real-estate-dashboard-project/
 * Dropped unnecessary metadata fields while retaining fields useful for Market Analysis and Competitive Analysis
 * Added invalid numeric, date consistency, and geographic quality flag columns
 * Saved the cleaned sold dataset and cleaning summary reports to local `data/` folders
+* Created `notebooks/week4_5_flagged_rows_investigation.ipynb` to investigate and resolve every flagged category:
+  * Filtered out non-California records, including mislabeled properties in Mexico, Arizona, and Nevada found by cross-checking city, county, zip code, and coordinates
+  * Repaired corrupted coordinates (sign-flip recovery) and zip codes (typo correction plus reverse geocoding), and fixed year typos in contract dates
+  * Set impossible values to missing instead of guessing: zero living areas, negative days on market, and dates that violate the listing-purchase-close timeline
+  * Kept price and size outliers flagged for review since they represent valid luxury and multi-unit sales
+  * Saved the final analysis-ready dataset (447,954 rows) with a per-flag decision log documenting every transformation
 
 ---
 
@@ -123,6 +129,7 @@ real-estate-dashboard-project/
 | Weeks 2-3 | `notebooks/week2_3_listing_raw_eda_questions.ipynb` | Listing raw data EDA question notebook |
 | Weeks 2-3 | `notebooks/mortgage_rate_vs_sales_volume.ipynb` | Mortgage rate vs. sold volume analysis |
 | Weeks 4-5 | `python/week4_5_clean_sold_data.py` | Clean sold data and create analysis-ready output |
+| Weeks 4-5 | `notebooks/week4_5_flagged_rows_investigation.ipynb` | Investigate and resolve all data quality flags, produce the final dataset |
 
 ---
 
