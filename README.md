@@ -111,6 +111,16 @@ real-estate-dashboard-project/
   * Set impossible values to missing instead of guessing: zero living areas, negative days on market, and dates that violate the listing-purchase-close timeline
   * Kept price and size outliers flagged for review since they represent valid luxury and multi-unit sales
   * Saved the final analysis-ready dataset (447,954 rows) with a per-flag decision log documenting every transformation
+* Created `python/week4_5_resolve_flags.py` to replay every flag resolution as a reproducible, offline script with built-in verification checks, completing the command-line pipeline from raw monthly CSVs to the final dataset
+
+### Week 6
+
+* Created `python/week6_feature_engineering.py` (with `notebooks/week6_feature_engineering.ipynb` for exploration) to engineer the market metrics that power the Tableau dashboards
+* Engineered seven indicators: sale-to-list ratio, close-to-original-list ratio, price per square foot, close year/month/YrMo, listing-to-contract days, and contract-to-close days
+* Added a ratio guard that sets ratios built on placeholder-grade prices (below \$1,000) to missing, and repaired two price errors surfaced by the ratio check
+* Assigned school districts (Unified, Elementary, High) to each property with a GeoPandas point-in-polygon spatial join against the California School District Areas 2024-25 boundaries, reprojecting from EPSG:3857 to EPSG:4326 first (98.98% of rows matched)
+* Generated segment summary tables by PropertySubType, CountyOrParish, and ListOfficeName using median-based statistics
+* Saved the feature-engineered dataset (447,953 rows x 75 columns) and segment reports to local `data/` folders
 
 ---
 
@@ -130,6 +140,9 @@ real-estate-dashboard-project/
 | Weeks 2-3 | `notebooks/mortgage_rate_vs_sales_volume.ipynb` | Mortgage rate vs. sold volume analysis |
 | Weeks 4-5 | `python/week4_5_clean_sold_data.py` | Clean sold data and create analysis-ready output |
 | Weeks 4-5 | `notebooks/week4_5_flagged_rows_investigation.ipynb` | Investigate and resolve all data quality flags, produce the final dataset |
+| Weeks 4-5 | `python/week4_5_resolve_flags.py` | Reproducible script version of all flag resolutions, with verification checks |
+| Week 6 | `python/week6_feature_engineering.py` | Engineer market metrics, assign school districts, and build segment summaries |
+| Week 6 | `notebooks/week6_feature_engineering.ipynb` | Exploration notebook for the Week 6 feature engineering |
 
 ---
 
