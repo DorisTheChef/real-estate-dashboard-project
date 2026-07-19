@@ -158,6 +158,12 @@ def add_school_districts(df):
 
     df = df.merge(district_lookup, on=["Latitude", "Longitude"], how="left")
 
+    # Single district column for dashboards: Unified where one exists,
+    # otherwise the Elementary district (layered Elementary + High areas).
+    df["school_district"] = (
+        df["school_district_unified"].fillna(df["school_district_elementary"])
+    )
+
     district_cols = [
         c for c in ["school_district_unified",
                     "school_district_elementary",
@@ -165,6 +171,8 @@ def add_school_districts(df):
     ]
     matched_any = df[district_cols].notna().any(axis=1)
     print(f"School district matched: {matched_any.mean() * 100:.2f}% of rows")
+    print(f"school_district (single column) populated: "
+          f"{df['school_district'].notna().mean() * 100:.2f}% of rows")
     return df
 
 
@@ -203,7 +211,8 @@ def main():
     new_columns = [
         "sale_to_list_ratio", "close_to_original_list_ratio", "price_per_sqft",
         "close_yrmo", "listing_to_contract_days", "contract_to_close_days",
-        "school_district_unified", "school_district_elementary", "school_district_high",
+        "school_district", "school_district_unified",
+        "school_district_elementary", "school_district_high",
     ]
     print("\n--- Sample of engineered columns ---")
     print(sold[["ListingKey", "ClosePrice"] + new_columns].head(10).to_string())

@@ -76,6 +76,45 @@ This step requires GeoPandas and the California School District Areas 2024-25
 shapefile in `data/raw/school_districts/`. It saves the feature dataset to
 `data/processed/` and segment summaries to `data/reports/week6_feature_engineering/`.
 
+## Outlier detection
+
+Run this script from the project root after `week6_feature_engineering.py` to
+add IQR outlier flags (3.0x multiplier, chosen because the fields are
+right-skewed) and save both a full flagged dataset and a clean filtered one,
+along with a before/after comparison:
+
+```bash
+python python/week7_outlier_detection.py
+```
+
+## Clean the listing dataset
+
+Run this script from the project root after `enrich_mortgage_rates.py` to
+prepare the listing data behind the "New Listings" dashboard. It removes
+duplicate columns and rows, applies the California filter and coordinate
+repairs, and derives the monthly `list_yrmo` key:
+
+```bash
+python python/week5_clean_listings.py
+```
+
+The sold and listing branches of the pipeline are:
+
+```bash
+# Shared steps
+python python/combine_crmls_monthly.py
+python python/enrich_mortgage_rates.py
+
+# Sold branch
+python python/week4_5_clean_sold_data.py
+python python/week4_5_resolve_flags.py
+python python/week6_feature_engineering.py
+python python/week7_outlier_detection.py
+
+# Listing branch
+python python/week5_clean_listings.py
+```
+
 ## Script map by week
 
 | Week | Script | Purpose |
@@ -87,4 +126,6 @@ shapefile in `data/raw/school_districts/`. It saves the feature dataset to
 | Weeks 2-3 | `enrich_mortgage_rates.py` | Merge monthly FRED mortgage rates into sold and listing datasets |
 | Weeks 4-5 | `week4_5_clean_sold_data.py` | Clean sold data, add quality flags, and save an analysis-ready CSV |
 | Weeks 4-5 | `week4_5_resolve_flags.py` | Resolve every quality flag (repairs, missing values, verified deletions) and save the final dataset |
+| Week 5 | `week5_clean_listings.py` | Clean the listing dataset and derive monthly new-listing counts |
 | Week 6 | `week6_feature_engineering.py` | Engineer market metrics, assign school districts via spatial join, and build segment summaries |
+| Week 7 | `week7_outlier_detection.py` | Apply IQR outlier flags and save flagged and filtered datasets |

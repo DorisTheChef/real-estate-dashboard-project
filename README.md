@@ -112,6 +112,11 @@ real-estate-dashboard-project/
   * Kept price and size outliers flagged for review since they represent valid luxury and multi-unit sales
   * Saved the final analysis-ready dataset (447,954 rows) with a per-flag decision log documenting every transformation
 * Created `python/week4_5_resolve_flags.py` to replay every flag resolution as a reproducible, offline script with built-in verification checks, completing the command-line pipeline from raw monthly CSVs to the final dataset
+* Cleaned the listing dataset in `python/week5_clean_listings.py` (with `notebooks/week5_clean_listings.ipynb`) so the dashboards can count new listings per month:
+  * Dropped 11 duplicate columns that arrived with a `.1` suffix from the combine step
+  * Deduplicated to one row per `ListingKey`, keeping the earliest listing date so each home is counted once
+  * Applied the same California filter, coordinate repairs, and 90% missing-column rule used for the sold data
+  * Derived a `list_yrmo` month key and saved the cleaned dataset (615,073 listings across 30 months)
 
 ### Week 6
 
@@ -119,8 +124,17 @@ real-estate-dashboard-project/
 * Engineered seven indicators: sale-to-list ratio, close-to-original-list ratio, price per square foot, close year/month/YrMo, listing-to-contract days, and contract-to-close days
 * Added a ratio guard that sets ratios built on placeholder-grade prices (below \$1,000) to missing, and repaired two price errors surfaced by the ratio check
 * Assigned school districts (Unified, Elementary, High) to each property with a GeoPandas point-in-polygon spatial join against the California School District Areas 2024-25 boundaries, reprojecting from EPSG:3857 to EPSG:4326 first (98.98% of rows matched)
+* Added a single `school_district` column (Unified where one exists, otherwise the Elementary district) so dashboards can filter and group on one field while the type-specific columns remain available
 * Generated segment summary tables by PropertySubType, CountyOrParish, and ListOfficeName using median-based statistics
-* Saved the feature-engineered dataset (447,953 rows x 75 columns) and segment reports to local `data/` folders
+* Saved the feature-engineered dataset (447,953 rows x 76 columns) and segment reports to local `data/` folders
+
+### Week 7
+
+* Created `python/week7_outlier_detection.py` (with `notebooks/week7_outlier_detection.ipynb`) to apply Interquartile Range outlier detection to ClosePrice, LivingArea, and DaysOnMarket
+* Chose a 3.0x IQR multiplier instead of the textbook 1.5x: all three fields are right-skewed, so 1.5x fences flagged about 7% of records and misclassified normal high-end homes, while 3.0x fences isolate genuinely extreme records (1-3% per field)
+* Added per-field IQR outlier flags plus a combined flag rather than deleting records, keeping the Week 4-5 percentile-based flags alongside them for comparison
+* Saved both a full flagged dataset (447,953 rows) and a clean filtered dataset (421,280 rows) with a before/after comparison report
+* Documented a key finding: removing the 5.95% flagged records moved the median close price by only 2% but the mean by 17.5%, confirming that medians resist outliers and justifying their use throughout this project's market analysis
 
 ---
 
@@ -141,8 +155,12 @@ real-estate-dashboard-project/
 | Weeks 4-5 | `python/week4_5_clean_sold_data.py` | Clean sold data and create analysis-ready output |
 | Weeks 4-5 | `notebooks/week4_5_flagged_rows_investigation.ipynb` | Investigate and resolve all data quality flags, produce the final dataset |
 | Weeks 4-5 | `python/week4_5_resolve_flags.py` | Reproducible script version of all flag resolutions, with verification checks |
+| Week 5 | `python/week5_clean_listings.py` | Clean the listing dataset for new-listing counts |
+| Week 5 | `notebooks/week5_clean_listings.ipynb` | Exploration notebook for the listing cleaning |
 | Week 6 | `python/week6_feature_engineering.py` | Engineer market metrics, assign school districts, and build segment summaries |
 | Week 6 | `notebooks/week6_feature_engineering.ipynb` | Exploration notebook for the Week 6 feature engineering |
+| Week 7 | `python/week7_outlier_detection.py` | Apply IQR outlier flags and save flagged and filtered datasets |
+| Week 7 | `notebooks/week7_outlier_detection.ipynb` | Exploration notebook for the IQR multiplier choice |
 
 ---
 
