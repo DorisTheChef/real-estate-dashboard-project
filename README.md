@@ -66,6 +66,45 @@ real-estate-dashboard-project/
 
 ---
 
+## Data Lineage
+
+Each processing stage produces a new CSV in `data/processed/` (not committed).
+The two branches below trace how the raw monthly files become the final
+Tableau-ready datasets. Row and column counts are the current values.
+
+Processed CSVs use a numbered `<branch>_<stage>_<name>.csv` scheme so the
+folder reads in pipeline order.
+
+### Sold data chain
+
+| Stage | Script | Output CSV | Rows x Cols |
+| ----- | ------ | ---------- | ----------- |
+| Combine | `combine_crmls_monthly.py` | `sold_1_combined.csv` | 447,993 x 84 |
+| Mortgage enrich | `enrich_mortgage_rates.py` | `sold_2_enriched.csv` | 447,993 x 84 |
+| Clean + flag | `week4_5_clean_sold_data.py` | `sold_3_cleaned.csv` | 447,991 x 67 |
+| Resolve flags | `week4_5_resolve_flags.py` | `sold_4_resolved.csv` | 447,954 x 65 |
+| Feature engineering | `week6_feature_engineering.py` | `sold_5_features.csv` | 447,953 x 76 |
+| IQR flags (full) | `week7_outlier_detection.py` | `sold_6_flagged.csv` | 447,953 x 80 |
+| IQR filtered | `week7_outlier_detection.py` | `sold_6_filtered.csv` | 421,280 x 80 |
+
+`sold_6_flagged.csv` is the end-to-end sold deliverable used for the Tableau
+dashboards (it keeps every row and adds an `iqr_outlier_any_flag` so
+typical-market and full-market views can be toggled). `sold_6_filtered.csv`
+is the same data with the flagged extremes already removed.
+
+### Listing data chain
+
+| Stage | Script | Output CSV | Rows x Cols |
+| ----- | ------ | ---------- | ----------- |
+| Combine | `combine_crmls_monthly.py` | `listings_1_combined.csv` | 615,484 x 84 |
+| Mortgage enrich | `enrich_mortgage_rates.py` | `listings_2_enriched.csv` | 615,484 x 86 |
+| Clean | `week5_clean_listings.py` | `listings_3_cleaned.csv` | 615,073 x 63 |
+
+`listings_3_cleaned.csv` is one row per listing and powers the "New
+Listings" dashboard.
+
+---
+
 ## Current Progress
 
 ### Week 0

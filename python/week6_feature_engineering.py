@@ -28,8 +28,8 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 REPORT_DIR = PROJECT_ROOT / "data" / "reports" / "week6_feature_engineering"
 
-INPUT_FILE = PROCESSED_DIR / "crmls_sold_final_202401_202606.csv"
-OUTPUT_FILE = PROCESSED_DIR / "crmls_sold_features_202401_202606.csv"
+INPUT_FILE = PROCESSED_DIR / "sold_4_resolved.csv"
+OUTPUT_FILE = PROCESSED_DIR / "sold_5_features.csv"
 SCHOOL_DISTRICT_SHP = (
     PROJECT_ROOT / "data" / "raw" / "school_districts" / "DistrictAreas2425.shp"
 )

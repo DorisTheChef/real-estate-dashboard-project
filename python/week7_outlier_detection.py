@@ -25,9 +25,9 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 REPORT_DIR = PROJECT_ROOT / "data" / "reports" / "week7_outlier_detection"
 
-INPUT_FILE = PROCESSED_DIR / "crmls_sold_features_202401_202606.csv"
-FLAGGED_FILE = PROCESSED_DIR / "crmls_sold_flagged_202401_202606.csv"
-FILTERED_FILE = PROCESSED_DIR / "crmls_sold_filtered_202401_202606.csv"
+INPUT_FILE = PROCESSED_DIR / "sold_5_features.csv"
+FLAGGED_FILE = PROCESSED_DIR / "sold_6_flagged.csv"
+FILTERED_FILE = PROCESSED_DIR / "sold_6_filtered.csv"
 
 # 3.0 marks "extreme" outliers (1.5 marks "mild"); see module docstring.
 IQR_K = 3.0

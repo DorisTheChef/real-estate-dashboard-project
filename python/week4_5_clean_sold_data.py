@@ -14,11 +14,11 @@ MISSING_DROP_THRESHOLD = 90.0
 
 INPUT_FILE = (
     PROCESSED_DIR
-    / f"crmls_sold_combined_residential_with_mortgage_rates_{START_MONTH}_{END_MONTH}.csv"
+    / f"sold_2_enriched.csv"
 )
 OUTPUT_FILE = (
     PROCESSED_DIR
-    / f"crmls_sold_cleaned_before_ca_filter_{START_MONTH}_{END_MONTH}.csv"
+    / f"sold_3_cleaned.csv"
 )
 
 # Date columns must be true datetime values before timeline checks can work.

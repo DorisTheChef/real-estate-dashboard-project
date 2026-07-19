@@ -402,7 +402,7 @@ def main():
     ].copy()
 
     filtered_output = (
-        PROCESSED_DIR / f"crmls_sold_residential_eda_filtered_{START_MONTH}_{END_MONTH}.csv"
+        PROCESSED_DIR / f"sold_eda_filtered.csv"
     )
     residential.to_csv(filtered_output, index=False)
 

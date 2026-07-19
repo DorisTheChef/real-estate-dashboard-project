@@ -27,9 +27,9 @@ REPORT_DIR = PROJECT_ROOT / "data" / "reports" / "week5_listing_cleaning"
 
 INPUT_FILE = (
     PROCESSED_DIR
-    / "crmls_listings_combined_residential_with_mortgage_rates_202401_202606.csv"
+    / "listings_2_enriched.csv"
 )
-OUTPUT_FILE = PROCESSED_DIR / "crmls_listings_final_202401_202606.csv"
+OUTPUT_FILE = PROCESSED_DIR / "listings_3_cleaned.csv"
 
 MISSING_DROP_THRESHOLD = 90.0
 

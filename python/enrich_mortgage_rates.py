@@ -12,19 +12,19 @@ END_MONTH = "202606"
 FRED_MORTGAGE_URL = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=MORTGAGE30US"
 
 SOLD_INPUT = (
-    PROCESSED_DIR / f"crmls_sold_combined_residential_{START_MONTH}_{END_MONTH}.csv"
+    PROCESSED_DIR / f"sold_1_combined.csv"
 )
 LISTINGS_INPUT = (
-    PROCESSED_DIR / f"crmls_listings_combined_residential_{START_MONTH}_{END_MONTH}.csv"
+    PROCESSED_DIR / f"listings_1_combined.csv"
 )
 
 SOLD_OUTPUT = (
     PROCESSED_DIR
-    / f"crmls_sold_combined_residential_with_mortgage_rates_{START_MONTH}_{END_MONTH}.csv"
+    / f"sold_2_enriched.csv"
 )
 LISTINGS_OUTPUT = (
     PROCESSED_DIR
-    / f"crmls_listings_combined_residential_with_mortgage_rates_{START_MONTH}_{END_MONTH}.csv"
+    / f"listings_2_enriched.csv"
 )
 
 

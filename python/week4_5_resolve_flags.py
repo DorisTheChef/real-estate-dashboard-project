@@ -24,8 +24,8 @@ import pandas as pd
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 PROCESSED_DIR = PROJECT_ROOT / "data" / "processed"
 
-INPUT_FILE = PROCESSED_DIR / "crmls_sold_cleaned_before_ca_filter_202401_202606.csv"
-OUTPUT_FILE = PROCESSED_DIR / "crmls_sold_final_202401_202606.csv"
+INPUT_FILE = PROCESSED_DIR / "sold_3_cleaned.csv"
+OUTPUT_FILE = PROCESSED_DIR / "sold_4_resolved.csv"
 
 DATE_FIELDS = [
     "CloseDate",

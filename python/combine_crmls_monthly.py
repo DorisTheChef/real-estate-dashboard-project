@@ -140,11 +140,11 @@ def main():
 
     listings_output = (
         PROCESSED_DIR
-        / f"crmls_listings_combined_residential_{START_MONTH}_{END_MONTH}.csv"
+        / f"listings_1_combined.csv"
     )
     sold_output = (
         PROCESSED_DIR
-        / f"crmls_sold_combined_residential_{START_MONTH}_{END_MONTH}.csv"
+        / f"sold_1_combined.csv"
     )
 
     listings.to_csv(listings_output, index=False)
